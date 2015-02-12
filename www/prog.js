@@ -2,7 +2,7 @@ var circle = new ProgressBar.Circle('#example-percent-container', {
   color: '#FCB03C',
   strokeWidth: 3,
   trailWidth: 3,
-  duration: 2000,
+  duration: 1000,
   /*text: {
     value: 'あと24時間00分00秒',
     autoStyle :false,
