@@ -1,0 +1,88 @@
+<h1>Contribution documentation</h1>
+<p>Pull requests and contributions are warmly welcome.
+Please follow existing code style and commit message conventions. Also remember to keep documentation
+updated.</p>
+<p><strong>Pull requests:</strong> You don&#39;t need to bump version numbers or modify anything related to releasing. That stuff is fully automated, just write the functionality.</p>
+<h2>Get started with development</h2>
+<ul>
+<li><a href="#install-environment">Install local environment</a>.</li>
+<li><code>cd local-dev</code> and serve folder to browser</li>
+<li>Open another terminal to project root and run <code>grunt watch</code>.</li>
+</ul>
+<p>Then you can edit <code>src/progressbar.js</code> and changes can be tested in browser.
+Edit <code>local-dev/main.js</code> to your testing needs.</p>
+<h2>General project stuff</h2>
+<p>This package uses npm/node tools just in the developer environment. Grunt is used as a task runner
+but there&#39;s no reason it couldn&#39;t be replaced with e.g. Makefile</p>
+<p><em>ProgressBar.js</em> depends on tweening library called <a href="https://github.com/jeremyckahn/shifty">shifty</a>.
+<em>Shifty</em> is bundled inside the scripts in <a href="dist/">dist/</a> directory.
+Dependency is bundled in to ease using the library.</p>
+<h4>Versioning</h4>
+<p>Versioning follows <a href="http://semver.org/">Semantic Versioning 2.0.0</a>. The release script makes sure
+that for each release, there exists only one commit in history where version number in <em>bower.json</em>
+matches the release&#39;s version. That commit is tagged as the release, for example <code>0.4.1</code>. Commits after that have -dev suffix(<em>0.4.1-dev</em>) in the version number to avoid any possible confusion.</p>
+<p>In other words, if you look into <em>bower.json</em>, you can tell if the code base is a released version or not.</p>
+<h2>Install environment</h2>
+<p>Install tools needed for development:</p>
+<pre><code>npm install
+npm install -g watchify
+npm install -g browserify</code></pre>
+<p>For testing:</p>
+<pre><code>npm install -g mocha
+npm install -g testem</code></pre>
+<h2>Test</h2>
+<p>Tests are written with <a href="http://mochajs.org/">Mocha</a> + <a href="https://github.com/LearnBoost/expect.js/">expect.js</a>.
+Sometimes the tests fail even though they actually work on the browser. That might be cause of setTimeouts used
+in tests.</p>
+<p>Quickly run tests:</p>
+<pre><code>grunt test</code></pre>
+<p>This will use testem to run tests with Chrome. Other options specified below.</p>
+<h4>Testem</h4>
+<p><a href="https://github.com/airportyh/testem">Testem</a> is used for running tests locally. It is fast and easy to use.
+List of example commands:</p>
+<ul>
+<li><code>testem</code> Serves testing page so that you can connect any browser to it.</li>
+<li><code>testem ci</code> Runs tests an all available/detected local browsers.</li>
+<li><code>testem ci -R dot -l chrome</code> Runs tests with Chrome using dot reported.</li>
+</ul>
+<h4>Karma</h4>
+<p><a href="http://karma-runner.github.io/">Karma</a> is used for running tests to be executed in Sauce Labs.
+Karma was used because integrating it to Sauce Labs is easier than with Testem.</p>
+<p>You must setup <code>SAUCE_USERNAME</code> and <code>SAUCE_ACCESS_KEY</code> environment variables.
+See <a href="https://github.com/karma-runner/karma-sauce-launcher#username">karma-sauce-launcher project documentation</a>. Browsers used to test are specified in <a href="karma.conf.js">karma.conf.js</a>.</p>
+<p>You can run tests with all browsers:</p>
+<pre><code>grunt karma</code></pre>
+<p>Tests are run sequentially in batches of browsers to prevent timeouts in Sauce Labs.
+You can also run single set of browsers to see test results faster:</p>
+<pre><code>grunt karma:sauce0</code></pre>
+<h2>Release</h2>
+<p><strong>Before releasing, make sure there are no uncommitted files,
+tests pass and jshint gives no errors.</strong></p>
+<p>Creating a new release of the package is simple:</p>
+<ul>
+<li>Commit all changes</li>
+<li><p>Run <code>grunt release</code>, which will create new tag and publish code to GitHub</p>
+<p>  Bower detects your new version of git tag.</p>
+</li>
+<li><p>Edit GitHub release notes</p>
+</li>
+</ul>
+<p>By default, patch release is done. You can specify the version bump as a parameter:</p>
+<pre><code>grunt release:major</code></pre>
+<p>Valid version bump values: <code>major</code>, <code>minor</code>, <code>patch</code>.</p>
+<h2>Decision log</h2>
+<ul>
+<li>Animate SVG paths with CSS3 transitions to make animations smooth.</li>
+<li>API must provide built-in shapes and a way to use totally custom SVG.</li>
+<li>Document manually. More overhead and risk of out dated information but easier to get started and contribute with pull requests.</li>
+<li>Animate paths with JS because IE does not support CSS transitions for SVG properties. This also allows
+animation customizations and possible even using different easings per animation(in future).</li>
+<li>Expose ProgressBar so it can be used with basic module loaders or as a global.</li>
+<li>Bundle shifty inside the final distributable instead of requiring users to install both libs. If someone has already included shifty, then a custom build should be made.</li>
+<li>Ship distributables to Bower. Fully automate releasing.</li>
+<li>Ship distributables also to NPM to ease life of Browserify users.</li>
+<li>Delegate shifty dependency handling to NPM instead of keeping it in repository but still bundle it inside the final distributable.</li>
+<li>Automate tests so that testing is locally fast and CI runs tests with more browsers in Sauce Labs</li>
+<li>Because of introducing text attribute, the library must modify CSS also. Provide user an option to make CSS them selves.</li>
+<li>Keep <strong>master</strong> branch as a release branch so that new users can see the documentation for latest release instead of development version.</li>
+</ul>

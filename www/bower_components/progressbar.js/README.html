@@ -1,0 +1,438 @@
+<h1>ProgressBar.js</h1>
+<p><strong>Version: 0.7.4</strong> (<a href="https://github.com/kimmobrunfeldt/progressbar.js/tree/0.7.3"><em>previous stable</em></a>, <a href="https://github.com/kimmobrunfeldt/progressbar.js/tree/dev"><em>latest dev</em></a>)</p>
+<p><br>
+<img src="docs/animation.gif" alt="Beautiful animation"></p>
+<p><br>
+Beautiful and responsive progress bars with animated SVG paths.
+<a href="#api">Use built-in shapes</a> or <a href="#pathpath-options">create your own paths</a>.
+<a href="#custom-animations">Customize</a> the animations as you wish.</p>
+<p>See <a href="https://kimmobrunfeldt.github.io/progressbar.js"><strong>demo page</strong></a> for examples or
+<a href="http://jsfiddle.net/kimmobrunfeldt/8xa87k31/"><strong>try it in JSFiddle</strong></a>.</p>
+<h1>Get started</h1>
+<p><a href="https://travis-ci.org/kimmobrunfeldt/progressbar.js"><img src="https://api.travis-ci.org/kimmobrunfeldt/progressbar.js.svg?branch=master" alt="Build Status"></a> <em>Build status and browser tests for current master</em></p>
+<p><a href="https://saucelabs.com/u/kimmobrunfeldt"><img src="https://saucelabs.com/browser-matrix/kimmobrunfeldt.svg" alt="Sauce Test Status"></a></p>
+<p><em>ProgressBar.js</em> is lightweight, MIT licensed and supports all major browsers including <strong>IE9+</strong>.
+See complete examples in <a href="#examples">examples</a> section.</p>
+<h4>Installing options:</h4>
+<ul>
+<li><p>Using bower</p>
+<pre><code>  bower install progressbar.js</code></pre>
+</li>
+<li><p>Using npm</p>
+<pre><code>  npm install progressbar.js</code></pre>
+</li>
+<li><p>Including <a href="dist/progressbar.js"><em>dist/progressbar.js</em></a> or <a href="dist/progressbar.min.js">dist/progressbar.min.js</a> from latest tag to your project.</p>
+</li>
+</ul>
+<h4>Loading module</h4>
+<p>Files in <code>dist/</code> folder are UMD modules built with Browserify&#39;s <code>--standalone</code> switch. Read more about <a href="http://www.forbeslindesay.co.uk/post/46324645400/standalone-browserify-builds">standalone Browserify builds</a>.</p>
+<p>CommonJS</p>
+<pre><code class="language-javascript">var ProgressBar = require(&#39;progressbar.js&#39;)
+var line = new ProgressBar.Line(&#39;#container&#39;);</code></pre>
+<p>AMD</p>
+<pre><code class="language-javascript">require.config({
+    paths: {&quot;progressbar&quot;: &quot;../bower_components/progressbar.js/dist/progressbar&quot;}
+});
+
+define([&#39;progressbar&#39;], function(ProgressBar) {
+    var line = new ProgressBar.Line(&#39;#container&#39;);
+});</code></pre>
+<p>Global variable</p>
+<pre><code class="language-javascript">// If you aren&#39;t using any module loader, progressbar.js exposes
+// global variable: window.ProgressBar
+var line = new ProgressBar.Line(&#39;#container&#39;);</code></pre>
+<h1>How it works</h1>
+<p>Progress bars are just regular SVG paths.
+Read <a href="http://jakearchibald.com/2013/animated-line-drawing-svg/">Jake Archibald&#39;s blog post</a> to see how the path drawing works under the hood.</p>
+<p><em>ProgressBar.js</em> uses <a href="https://jeremyckahn.github.io/shifty/">shifty</a> tweening library to animate path drawing.
+So in other words, animation is done with JavaScript using <a href="https://developer.mozilla.org/en-US/docs/Web/API/window.requestAnimationFrame">requestAnimationFrame</a>.
+Animating with JS gives more control over the animation and is supported across major browsers. For example IE <a href="https://connect.microsoft.com/IE/feedbackdetail/view/920928/ie-11-css-transition-property-not-working-for-svg-elements">does not support</a>
+animating SVG properties with CSS transitions.</p>
+<h1>API</h1>
+<p><strong>NOTE:</strong> Line, Circle and Square links all point to the same documentation
+which is named Shape. Shape is <strong>not</strong> a real attribute, instead you should
+replace it with <strong>Line</strong>, <strong>Circle</strong> or <strong>Square</strong>.</p>
+<p><a href="#api"><strong>ProgressBar</strong></a></p>
+<ul>
+<li><a href="#shapecontainer-options">Line(container, [<em>options</em>])</a><ul>
+<li><a href="#shapesvg"><em>svg</em></a></li>
+<li><a href="#shapepath"><em>path</em></a></li>
+<li><a href="#shapetrail"><em>trail</em></a></li>
+<li><a href="#shapetext"><em>text</em></a></li>
+<li><a href="#shapeanimateprogress-options-cb">animate(progress, [<em>options</em>], [<em>cb</em>])</a></li>
+<li><a href="#shapesetprogress">set(progress)</a></li>
+<li><a href="#shapestop">stop()</a></li>
+<li><a href="#shapevalue">value()</a></li>
+<li><a href="#shapesettexttext">setText(text)</a></li>
+<li><a href="#shapedestroy">destroy()</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="#shapecontainer-options">Circle(container, [<em>options</em>])</a><ul>
+<li><a href="#shapesvg"><em>svg</em></a></li>
+<li><a href="#shapepath"><em>path</em></a></li>
+<li><a href="#shapetrail"><em>trail</em></a></li>
+<li><a href="#shapetext"><em>text</em></a></li>
+<li><a href="#shapeanimateprogress-options-cb">animate(progress, [<em>options</em>], [<em>cb</em>])</a></li>
+<li><a href="#shapesetprogress">set(progress)</a></li>
+<li><a href="#shapestop">stop()</a></li>
+<li><a href="#shapevalue">value()</a></li>
+<li><a href="#shapesettexttext">setText(text)</a></li>
+<li><a href="#shapedestroy">destroy()</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="#shapecontainer-options">Square(container, [<em>options</em>])</a><ul>
+<li><a href="#shapesvg"><em>svg</em></a></li>
+<li><a href="#shapepath"><em>path</em></a></li>
+<li><a href="#shapetrail"><em>trail</em></a></li>
+<li><a href="#shapetext"><em>text</em></a></li>
+<li><a href="#shapeanimateprogress-options-cb">animate(progress, [<em>options</em>], [<em>cb</em>])</a></li>
+<li><a href="#shapesetprogress">set(progress)</a></li>
+<li><a href="#shapestop">stop()</a></li>
+<li><a href="#shapevalue">value()</a></li>
+<li><a href="#shapesettexttext">setText(text)</a></li>
+<li><a href="#shapedestroy">destroy()</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><a href="#pathpath-options">Path(path, [<em>options</em>])</a><ul>
+<li><a href="#pathanimateprogress-options-cb">animate(progress, [<em>options</em>], [<em>cb</em>])</a></li>
+<li><a href="#pathsetprogress">set(progress)</a></li>
+<li><a href="#pathstop">stop()</a></li>
+<li><a href="#pathvalue">value()</a></li>
+</ul>
+</li>
+</ul>
+<p>Functions use node-style callback convention. Callback function is always the last given parameter.</p>
+<p>All built-in shapes except <a href="#linecontainer-options">Line</a> are drawn on 100x100 SVG canvas and the shape is fitted exactly to the canvas.
+Line is drawn on 100-width canvas and height depends on the stroke width.</p>
+<h2>Shape(container, [<em>options</em>])</h2>
+<p>Line, Circle or Square shaped progress bar. Appends SVG to container.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-javascript">var progressBar = new ProgressBar.Square(&#39;#container&#39;, {
+    strokeWidth: 2
+});</code></pre>
+<p>To make the shape resize with its container, set for example the following CSS:</p>
+<pre><code class="language-css">.container &gt; svg {
+    display: block;
+    width: 100%;
+}</code></pre>
+<p>With Line shape, you can control the width of the line by specifying e.g. <code>height: 5px</code>
+with CSS.</p>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><p><code>container</code> Element where SVG is added. Query string or element.</p>
+<p>  For example <code>&quot;#container&quot;</code> or <code>document.getElementById(&quot;#container&quot;)</code></p>
+</li>
+<li><p><code>options</code> Options for path drawing.</p>
+<pre><code class="language-javascript">  {
+      // Stroke color.
+      // Default: &quot;#555&quot;
+      color: &quot;#3a3a3a&quot;,
+
+      // Width of the stroke.
+      // Unit is percentage of SVG canvas&#39; size.
+      // Default: 1.0
+      strokeWidth: 2.1,
+
+      // If trail options are not defined, trail won&#39;t be drawn
+
+      // Color for lighter trail stroke
+      // underneath the actual progress path.
+      // Default: &#39;#eee&#39;
+      trailColor: &quot;#f4f4f4&quot;,
+
+      // Width of the trail stroke. Trail is always centered relative to
+      // actual progress path.
+      // Default: same as strokeWidth
+      trailWidth: 0.8,
+
+      // Text options. Text element is a &lt;p&gt; element appended to container
+      // You can add CSS rules for the text element with the className
+      // NOTE: When text is set, &#39;position: relative&#39; will be set to the
+      // container for centering. You can also prevent all style modifications
+      // with &#39;autoStyle: false&#39;
+      // Default: null
+      text: {
+          // Initial value for text.
+          // Default: null
+          value: &#39;Text&#39;,
+
+          // Text color.
+          // Default: same as stroke color (options.color)
+          color: &#39;#f00&#39;,
+
+          // Class name for text element.
+          // Default: &#39;progressbar-text&#39;
+          className: &#39;progressbar__label&#39;,
+
+          // If true, CSS is automatically set for container and text element.
+          // If you want to modify all CSS your self, set this to false
+          // Default: true
+          autoStyle: true
+      },
+
+      // Fill color for the shape. If null, no fill.
+      // Default: null
+      fill: &quot;rgba(0, 0, 0, 0.5)&quot;,
+
+      // Duration for animation in milliseconds
+      // Default: 800
+      duration: 1200,
+
+      // Easing for animation. See #easing section.
+      // Default: &quot;linear&quot;
+      easing: &quot;easeOut&quot;,
+
+      // See #custom-animations section
+      // Built-in shape passes reference to itself as attachment
+      // to step function
+      from: { color: &#39;#eee&#39; },
+      to: { color: &#39;#000&#39; },
+      step: function(state, square) {
+          square.path.setAttribute(&#39;stroke&#39;, state.color);
+      }
+  }</code></pre>
+</li>
+</ul>
+<h2>Shape.svg</h2>
+<p>Reference to <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/svg">SVG</a> element where progress bar is drawn.</p>
+<h2>Shape.path</h2>
+<p>Reference to <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path">SVG path</a> which presents the actual progress bar.</p>
+<h2>Shape.trail</h2>
+<p>Reference to <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Element/path">SVG path</a> which presents the trail of the progress bar.
+Returns <code>null</code> if trail is not defined.</p>
+<h2>Shape.text</h2>
+<p>Reference to <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/p">p element</a> which presents the text label for progress bar.
+Returns <code>null</code> if text is not defined.</p>
+<h2>Shape.animate(progress, [<em>options</em>], [<em>cb</em>])</h2>
+<p>Animates drawing of a shape.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-javascript">progressBar.animate(0.3, {
+    duration: 800
+}, function() {
+    console.log(&#39;Animation has finished&#39;);
+});</code></pre>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>progress</code> progress from 0 to 1.</li>
+<li><p><code>options</code> Animation options. These options override the defaults given in initialization.</p>
+<pre><code class="language-javascript">  {
+      // Duration for animation in milliseconds
+      // Default: 800
+      duration: 1200,
+
+      // Easing for animation. See #easing section.
+      // Default: &quot;linear&quot;
+      easing: &quot;easeInOut&quot;,
+
+      // See #custom-animations section
+      // Built-in shape passes reference to itself as attachment
+      // to step function
+      from: { color: &#39;#eee&#39; },
+      to: { color: &#39;#000&#39; },
+      step: function(state, square) {
+          square.path.setAttribute(&#39;stroke&#39;, state.color);
+      }
+  }</code></pre>
+</li>
+<li><p><code>cb</code> Callback function which is called after animation ends.</p>
+</li>
+</ul>
+<h2>Shape.set(progress)</h2>
+<p>Sets progress instantly without animation. Clears all animations
+for path.</p>
+<h2>Shape.stop()</h2>
+<p>Stops animation to its current position.</p>
+<h2>Shape.value()</h2>
+<p>Returns current shown progress from 0 to 1. This value changes when animation is running.</p>
+<h2>Shape.setText(text)</h2>
+<p>Sets text to given a string. If you need to dynamically modify the text element,
+see <a href="#shapetext">.text</a> attribute.</p>
+<h2>Shape.destroy()</h2>
+<p>Removes SVG element from container and removes all references to DOM elements. Destroying is irreversible.</p>
+<p><br>
+<br></p>
+<h2>Path(path, [<em>options</em>])</h2>
+<p>Custom shaped progress bar. You can create arbitrary shaped progress bars by
+passing a SVG path created with e.g. Adobe Illustrator. It&#39;s on caller&#39;s responsibility to append SVG to DOM.</p>
+<p><strong>Example</strong></p>
+<p>Assuming there was SVG object with heart shaped path in HTML</p>
+<pre><code class="language-html">&lt;svg xmlns=&quot;http://www.w3.org/2000/svg&quot; version=&quot;1.1&quot; x=&quot;0px&quot; y=&quot;0px&quot; viewBox=&quot;0 0 100 100&quot;&gt;
+    &lt;path fill-opacity=&quot;0&quot; stroke-width=&quot;0.5&quot; stroke=&quot;#f4f4f4&quot; d=&quot;M81.495,13.923c-11.368-5.261-26.234-0.311-31.489,11.032C44.74,13.612,29.879,8.657,18.511,13.923  C6.402,19.539,0.613,33.883,10.175,50.804c6.792,12.04,18.826,21.111,39.831,37.379c20.993-16.268,33.033-25.344,39.819-37.379  C99.387,33.883,93.598,19.539,81.495,13.923z&quot;/&gt;
+    &lt;path id=&quot;heart-path&quot; fill-opacity=&quot;0&quot; stroke-width=&quot;0.6&quot; stroke=&quot;#555&quot; d=&quot;M81.495,13.923c-11.368-5.261-26.234-0.311-31.489,11.032C44.74,13.612,29.879,8.657,18.511,13.923  C6.402,19.539,0.613,33.883,10.175,50.804c6.792,12.04,18.826,21.111,39.831,37.379c20.993-16.268,33.033-25.344,39.819-37.379  C99.387,33.883,93.598,19.539,81.495,13.923z&quot;/&gt;
+&lt;/svg&gt;</code></pre>
+<p>Initialization would be this easy</p>
+<pre><code class="language-javascript">var svgPath = document.getElementById(&quot;heart-path&quot;);
+var path = new ProgressBar.Path(svgPath, {
+    duration: 300
+});</code></pre>
+<p><strong>Working with embedded SVG</strong></p>
+<p>If the SVG was not inline in the HTML but instead in, say, an <code>&lt;object&gt;</code> tag, we&#39;d have to take extra steps to wait until it has loaded and then access it differently since it&#39;s in a separate DOM tree. Given e.g.:</p>
+<pre><code class="language-html">&lt;object id=&quot;heart&quot; type=&quot;image/svg+xml&quot; data=&quot;heart.svg&quot;&gt;No SVG support :(&lt;/object&gt;</code></pre>
+<p>we could do</p>
+<pre><code class="language-javascript">var heart = document.getElementById(&#39;heart&#39;);
+heart.addEventListener(&#39;load&#39;, function () {
+var path = new ProgressBar.Path(heartObject.contentDocument.querySelector(&#39;#heart-path&#39;), {
+    duration: 300
+});</code></pre>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>path</code> <a href="https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Paths">SVG Path</a> object. For example <code>$(&#39;svg &gt; path:first-child&#39;)[0]</code>.</li>
+<li><p><code>options</code> Animation options.</p>
+<pre><code class="language-javascript">  {
+      // Duration for animation in milliseconds
+      // Default: 800
+      duration: 1200,
+
+      // Easing for animation. See #easing section.
+      // Default: &quot;linear&quot;
+      easing: &quot;easeIn&quot;,
+
+      // Attachment which can be any object
+      // you need to modify within the step function.
+      // Passed as a parameter to step function.
+      // Default: undefined
+      attachment: document.querySelector(&#39;#container &gt; svg&#39;),
+
+      // See #custom-animations section
+      from: { color: &#39;#eee&#39; },
+      to: { color: &#39;#000&#39; },
+      step: function(state, attachment) {
+          // Do any modifications to attachment attributes
+      }
+  }</code></pre>
+</li>
+</ul>
+<h2>Path.animate(progress, [<em>options</em>], [<em>cb</em>])</h2>
+<p>Animates drawing of path.</p>
+<p><strong>Example</strong></p>
+<pre><code class="language-javascript">path.animate(0.3, {
+    duration: 800
+}, function() {
+    console.log(&#39;Animation has finished&#39;);
+});</code></pre>
+<p><strong>Parameters</strong></p>
+<ul>
+<li><code>progress</code> progress from 0 to 1.</li>
+<li><p><code>options</code> Animation options. These options override the defaults given in initialization.</p>
+<pre><code class="language-javascript">  {
+      // Duration for animation in milliseconds
+      // Default: 800
+      duration: 1200,
+
+      // Easing for animation. See #easing section.
+      // Default: &quot;linear&quot;
+      easing: &quot;easeOut&quot;,
+
+      // Attachment which can be any object
+      // you need to modify within the step function.
+      // Passed as a parameter to step function.
+      // Default: undefined
+      attachment: document.querySelector(&#39;#container &gt; svg&#39;),
+
+      // See #custom-animations section
+      from: { color: &#39;#eee&#39; },
+      to: { color: &#39;#000&#39; },
+      step: function(state, attachment) {
+          // Do any modifications to attachment attributes
+      }
+  }</code></pre>
+</li>
+<li><p><code>cb</code> Callback function which is called after transition ends.</p>
+</li>
+</ul>
+<h2>Path.set(progress)</h2>
+<p>Set progress instantly without animation. Clears all transitions
+for path.</p>
+<h2>Path.stop()</h2>
+<p>Stops animation to its current position.</p>
+<h2>Path.value()</h2>
+<p>Returns current shown progress from 0 to 1. This value changes when animation is running.</p>
+<p><br>
+<br></p>
+<h1>Parameters in detail</h1>
+<h2>Easing</h2>
+<p>Easing functions <a href="https://github.com/jeremyckahn/shifty/blob/master/src/shifty.formulas.js">provided with <em>shifty</em> are supported</a>.</p>
+<p>A few basic easing options:</p>
+<ul>
+<li><code>&quot;linear&quot;</code></li>
+<li><code>&quot;easeIn&quot;</code></li>
+<li><code>&quot;easeOut&quot;</code></li>
+<li><code>&quot;easeInOut&quot;</code></li>
+</ul>
+<h1>Custom animations</h1>
+<p>See <a href="https://kimmobrunfeldt.github.io/progressbar.js#example-custom-animation">example in demo page</a>.</p>
+<p>Customizing animations is possible with the help of <code>from</code>, <code>to</code> and <code>step</code> parameters.
+Tweening engine changes defined values over time and calls step function for each animation&#39;s frame.</p>
+<ul>
+<li><p><code>from</code> Object containing values which should be tweened.
+These values represent the starting values of the animation. Default: <code>{}</code>.</p>
+<p>  For example</p>
+<pre><code class="language-javascript">  {
+      // Start from thin gray line
+      width: 0.1,
+      color: &quot;#eee&quot;
+  }</code></pre>
+<p>  Thanks to shifty, you can tween values in formats like <code>translateX(45px)</code>, <code>rgb(0,255,0)</code> and <code>#fff</code>.
+  See all supported string formats from <a href="http://jeremyckahn.github.io/shifty/dist/doc/src/shifty.token.js.html#token">shifty&#39;s documentation</a></p>
+<p>  Easing defined as option for animation applies to all of the specified values.</p>
+</li>
+<li><p><code>to</code> Object containing values which should be tweened. These represent the final values after animation is done. Default: <code>{}</code>.</p>
+<p>  For example</p>
+<pre><code class="language-javascript">  {
+      // Finish to thick black line
+      width: 1,
+      color: &quot;#000&quot;
+  }</code></pre>
+<p>  <em>Signature must match <code>from</code></em></p>
+</li>
+<li><p><code>step</code> Function called for each animation step. Tweened values and reference to attachment are passed as parameters. Attachment can be reference to any object you need to modify within step function. Built-in shapes pass references to their selves as attachment. Default: <code>function() {}</code>.</p>
+<p>  <strong>This function is called multiple times per second.
+  To make sure animations run smoothly, keep it minimal.</strong></p>
+<p>  For example</p>
+<pre><code class="language-javascript">  function(state, attachment) {
+      attachment.path.setAttribute(&#39;stroke-width&#39;, state.width);
+      attachment.path.setAttribute(&#39;stroke&#39;, state.color);
+  }</code></pre>
+</li>
+</ul>
+<p><strong>Note:</strong> There&#39;s a big difference between passing the <code>from</code> and <code>to</code> parameters in initialization
+of progress bar compared to passing in <code>.animate()</code> call. Here&#39;s example code and illustrations to explain the difference:</p>
+<p><strong>Pass in initialization</strong></p>
+<pre><code class="language-javascript">var bar = new ProgressBar.Line(&#39;#container&#39;, {
+    from: { color: &#39;#000 &#39;},
+    to: { color: &#39;#888 &#39;},
+    step: function(state, bar) {
+        bar.setAttribute(&#39;stroke&#39;, state.color);
+    }
+});</code></pre>
+<p><img src="docs/animate-init.png" alt=""></p>
+<p><strong>Pass in <code>.animate()</code> call</strong></p>
+<pre><code class="language-javascript">var bar = new ProgressBar.Line(&#39;#container&#39;, {
+    step: function(state, bar) {
+        bar.setAttribute(&#39;stroke&#39;, state.color);
+    }
+});
+
+var opts = {
+    from: { color: &#39;#000 &#39;},
+    to: { color: &#39;#888 &#39;}
+};
+bar.animate(0.5, opts);</code></pre>
+<p><img src="docs/animate-call.png" alt=""></p>
+<h2>Examples</h2>
+<ul>
+<li><a href="http://kimmobrunfeldt.github.io/progressbar.js/examples/minimal/"><strong>Minimal</strong></a> <a href="https://github.com/kimmobrunfeldt/progressbar.js/tree/gh-pages/examples/minimal"><em>see code</em></a></li>
+<li><a href="http://kimmobrunfeldt.github.io/progressbar.js/examples/upload/"><strong>File upload</strong></a> <a href="https://github.com/kimmobrunfeldt/progressbar.js/tree/gh-pages/examples/upload"><em>see code</em></a></li>
+<li><a href="http://kimmobrunfeldt.github.io/progressbar.js/examples/telegram/"><strong>Telegram</strong></a> <a href="https://github.com/kimmobrunfeldt/progressbar.js/tree/gh-pages/examples/telegram"><em>see code</em></a></li>
+<li><a href="http://kimmobrunfeldt.github.io/progressbar.js/examples/password-strength/"><strong>Password strength</strong></a> <a href="https://github.com/kimmobrunfeldt/progressbar.js/tree/gh-pages/examples/password-strength"><em>see code</em></a></li>
+</ul>
+<h1>Contributing</h1>
+<p>See <a href="CONTRIBUTING.md">documentation for contributors</a>.</p>
+<h1>Thanks</h1>
+<p>This project is a grateful recipient of the <a href="http://futurice.com/blog/sponsoring-free-time-open-source-activities">Futurice Open Source sponsorship program</a>.</p>
