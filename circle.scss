@@ -2,9 +2,9 @@
 $color : red;
 
 .circle-container{
-  $size : 200px;
-  $padding : 0.1;
-  $circle-width: 1em * (0.1 / 2);
+  $size : 400px;
+  $padding : 0.5;
+  $circle-width: 1em * ($padding / 2);
   $inner-size : 1em - $padding;
 
   font-size: $size; // サイズ指定マジック
@@ -58,6 +58,8 @@ $color : red;
       height: $inner-size;
       clip : rect(0em,0.5em,1em,0em);
       border-radius: 0.5em;
+      -webkit-backface-visibility: hidden;
+
       &.fill{
         transform:rotate(180deg);
       }
