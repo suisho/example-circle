@@ -1,4 +1,4 @@
 function circleTimer($element, progress){
   $(".circle")
 }
-setProgress($(".circle"), 33)
+setProgress($(".circle-container"), 33)
