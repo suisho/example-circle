@@ -1,12 +1,12 @@
 function setProgress($element, progress){
-  // 右回転
-  var lPie = $element.find(".pie.left")
-  var rPie = $element.find(".pie.right")
-  var rPieMax = 180
-  var rDeg = 0
-  if(progress < 50){
-    rDeg = rPieMax * progress/50
-  }
-  rPie.css("transform", "rotate("+rDeg+"deg)")
+  var rotation = Math.floor(progress/100 * 180);
+	var fillRotation = rotation;
+	var fixRotation = rotation * 2;
+	$element.find('.circle .fill, .circle .mask.full').css("transform", 'rotate(' + fillRotation + 'deg)');
+	$element.find('.circle .fill.right').css("transform", 'rotate(' + fixRotation + 'deg)');
+	$element.find('.timer').text(progress)
 }
-setProgress($(".circle-container"), 33)
+
+setTimeout(function(){
+	setProgress($(".radial-progress"), 30)
+}, 0)

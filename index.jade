@@ -3,10 +3,13 @@ html
     script(src="https://code.jquery.com/jquery-1.11.2.js")
     link(rel="stylesheet" href="./circle.css")
   body
-    .circle-container
+    .radial-progress
       .circle
-        .circle-inner.timer 1:20:30
-      .slice
-        .pie.left
-        .pie.right
+        .mask.full
+          .fill
+        .mask.half
+          .fill
+          .fill.fix
+      .inset
+        .timer 0
     script(src="circle.js")
