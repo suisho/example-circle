@@ -1,0 +1,26 @@
+.circle-container{
+  $size : 200px;
+  width : $size;
+  height : $size;
+  text-align :center;
+  position : relative;
+
+  .circle{
+    border-radius : 50%;
+    &.outer{
+      width : 100%;
+      height : 100%;
+      background : #a2a2a2;
+    }
+    &.inner{
+      position : absolute;
+      margin-top: 5%;
+      margin-left: 5%;
+      width : 90%;
+      height : 90%;
+      background : white;
+      line-height: 100%;
+
+    }
+  }
+}
