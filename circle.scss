@@ -2,8 +2,8 @@
 $color : red;
 
 .circle-container{
-  $size : 400px;
-  $padding : 0.5;
+  $size : 200px;
+  $padding : 0.2;
   $circle-width: 1em * ($padding / 2);
   $inner-size : 1em - $padding;
 
@@ -60,7 +60,7 @@ $color : red;
       border-radius: 0.5em;
       -webkit-backface-visibility: hidden;
 
-      &.fill{
+      &.right{
         transform:rotate(180deg);
       }
     }
