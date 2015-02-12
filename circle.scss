@@ -22,9 +22,9 @@
 		}
 		.mask, .fill {
 			-webkit-backface-visibility: hidden;
-			transition: -webkit-transform $transition-length;
-			transition: -ms-transform $transition-length;
-			transition: transform $transition-length;
+			//transition: -webkit-transform $transition-length;
+			//transition: -ms-transform $transition-length;
+			//transition: transform $transition-length;
 		}
 		.mask {
 			clip: rect(0px, $circle-size, $circle-size, $circle-size/2);
@@ -43,5 +43,10 @@
 
 		background-color: $inset-color;
 		border-radius: 50%;
+		text-align : center;
+		.timer{
+			padding-top : 100px;
+			font-size: 40px;
+		}
 	}
 }
