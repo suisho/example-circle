@@ -1,16 +1,33 @@
-.circle-container{
+.rad-progress{
   $size : 200px;
+  $bgColor : #a2a2a2;
+  $progressColor : #6b9c36;
+  $transitionLength : 1s;
+  background-color : $bgColor;
   width : $size;
   height : $size;
   text-align :center;
   position : relative;
-
+  border-radius : 50%;
   .circle{
-    border-radius : 50%;
+    .mask{
+      clip: rect(0px $size $size $size/2);
+      .fill{
+        border-radius : 50%;
+        position: absolute;
+        clip: rect(0px $size/2 $size 0px);
+        background-color : $progressColor;
+        width : $size;
+        height : $size;
+        transition: -webkit-transform $transitionLength;
+        transition: -ms-transform $transitionLength;
+        transition: transform $transitionLength;
+        -webkit-backface-visibility: hidden;
+      }
+    }
     &.outer{
       width : 100%;
       height : 100%;
-      background : #a2a2a2;
     }
     &.inner{
       position : absolute;
@@ -20,7 +37,6 @@
       height : 90%;
       background : white;
       line-height: 100%;
-
     }
   }
 }
