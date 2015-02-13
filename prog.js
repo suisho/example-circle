@@ -1,33 +1,38 @@
 var circleProgress = new ProgressBar.Circle('#example-percent-container', {
-  color: '#FCB03C',
+  //color: '#FCB03C',
+  color: '#ccc',
+  trailColor: '#FCB03C',
   strokeWidth: 5,
-  trailWidth: 3,
+  trailWidth: 5,
   duration: 1000,
+  value : 1,
   step: function(state, bar) {
-    setTimer(restMicrosecound()/1000)
+    var time = valToTime(bar.value())
+    setTimer(time)
   }
 });
+
+function computeDuration(ms){
+  var h = String(Math.floor(ms / 3600000) + 100).substring(1);
+  var m = String(Math.floor((ms - h * 3600000)/60000)+ 100).substring(1);
+  var s = String(Math.round((ms - h * 3600000 - m * 60000)/1000)+ 100).substring(1);
+  return h+'時間'+m+'分'+s + '秒';
+}
 function setTimer(time){
-  var h = time / 3600 | 0
-  var m = time % 3600 / 60 | 0
-  var s = time % 60
-  function padZero(v){
-    v = Math.ceil(v)
-    return (v < 10) ? "0" + v : v
-  }
-  var text = padZero(h) + "時間" + padZero(m) + "分" + padZero(s) + "秒"
-  $(".timer").text(text)
-  $(".timer").data("time", time)
+  $(".timer").text(computeDuration(time))
 }
 function decrementTimer(){
   var t = restMicrosecound()
-  setTimer(t/1000)
+  setTimer(t)
 }
 function restMicrosecound(){
   var date = new Date($(".prog-container").data("timeout"))
   var now = new Date()
-  circleProgress.value(0.9)
   return date.getTime() - now.getTime()
+}
+function valToTime(val){
+  var max =  24 * 60 * 60 * 1000
+  return max - val * max
 }
 function restValue(){
   var max = 24 * 60 * 60 * 1000
@@ -35,10 +40,10 @@ function restValue(){
   return rest/max
 }
 setTimeout(function(){
-  var rest = restValue()
+  var rest = 1 - restValue()
   circleProgress.animate(rest, function() {
     setInterval(function(){
       decrementTimer()
-    }, 1000)
+    }, 500)
   })
 }, 500)
