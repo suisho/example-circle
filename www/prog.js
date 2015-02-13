@@ -23,6 +23,7 @@ function setTimer(time){
 }
 function decrementTimer(){
   var t = restMicrosecound()
+  circleProgress.set(1 - restValue())
   setTimer(t)
 }
 function restMicrosecound(){
